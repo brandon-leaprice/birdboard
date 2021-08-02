@@ -1,28 +1,23 @@
-<x-app-layout>
-    <header class="flex items-center mb-3 py-4">
-        <div class="flex justify-between items-end w-full px-5">
-            <h class="font-normal text-gray-400 text-sm py-4">My Project</h>
-            <a href="" class="text-white px-6 py-2 font-medium bg-blue-400 rounded shadow">New project</a>
+@extends ('layouts.app')
+
+@section('content')
+    <header class="flex items-center mb-3 pb-4">
+        <div class="flex justify-between items-end w-full">
+            <h2 class="text-muted text-base font-light">My Projects</h2>
+
+            <a href="/projects/create" class="button" @click.prevent="$modal.show('new-project')">New Project</a>
         </div>
     </header>
 
-
-    <div class="lg:flex lg:flex-wrap">
-        @forelse($projects as $project)
-
+    <main class="lg:flex lg:flex-wrap -mx-3">
+        @forelse ($projects as $project)
             <div class="lg:w-1/3 px-3 pb-6">
-                <div class="bg-white  p-5 rounded-lg shadow" style="height: 200px;">
-                    <h3 class="font-normal text-xl py-4 pl-4 mb-3 -ml-5 border-l-4 border-blue-400">
-                        <a href="{{ $project->path() }}">{{$project->title }}</a>
-                    </h3>
-
-                    <div class="text-gray-400">{{ \Illuminate\Support\Str::limit($project->description, 250) }}</div>
-                </div>
+                @include ('projects.card')
             </div>
         @empty
-
-        <div>No Project Found</div>
-
+            <div>No projects yet.</div>
         @endforelse
-    </div>
-</x-app-layout>
+    </main>
+
+    <new-project-modal></new-project-modal>
+@endsection

@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProjectInvitationsController;
+use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\ProjectTasksController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +23,13 @@ Route::get('/', function () {
 
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/projects', [\App\Http\Controllers\ProjectsController::class, 'index']);
-    Route::get('/projects/create', [\App\Http\Controllers\ProjectsController::class, 'create']);
-    Route::post('/projects/{project}/tasks', [\App\Http\Controllers\ProjectTasksController::class, 'store']);
-    Route::get('/projects/{project}', [\App\Http\Controllers\ProjectsController::class, 'show']);
-    Route::post('/projects', [\App\Http\Controllers\ProjectsController::class, 'store']);
+
+    Route::resource('projects', ProjectsController::class);
+
+    Route::post('/projects/{project}/tasks', [ProjectTasksController::class, 'store']);
+    Route::patch('/projects/{project}/tasks/{task}', [ProjectTasksController::class, 'update']);
+
+    Route::post('/projects/{project}/invitations', [ProjectInvitationsController::class, 'store']);
 });
 
 

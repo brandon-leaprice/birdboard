@@ -43,7 +43,15 @@ class User extends Authenticatable
 
     public function projects()
     {
-        return $this->hasMany(Project::class, 'owner_id');
+        return $this->hasMany(Project::class, 'owner_id')->latest('updated_at');
+    }
+
+    public function allProjects()
+    {
+        return Project::query()->where('owner_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+                $query->where('user_id', $this->id);
+            })->get();
     }
 
 }
